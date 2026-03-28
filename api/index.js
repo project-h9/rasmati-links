@@ -1,15 +1,17 @@
 export default function handler(req, res) {
-  const links = {
-    "7lyuh": "https://google.com",
-    "6m0ol": "https://youtube.com"
-  };
+  if (req.method === "POST") {
+    const { url } = req.body;
 
-  const code = req.query.code || "";
+    if (!url) {
+      return res.status(400).json({ error: "No URL" });
+    }
 
-  if (links[code]) {
-    res.writeHead(302, { Location: links[code] });
-    res.end();
+    const short = Math.random().toString(36).substring(7);
+
+    res.status(200).json({
+      short: "https://rasmati-links.vercel.app/" + short
+    });
   } else {
-    res.status(404).send("Not Found");
+    res.status(405).json({ error: "Method not allowed" });
   }
 }
