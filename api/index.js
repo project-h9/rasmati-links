@@ -1,4 +1,8 @@
+let links = {};
+
 export default function handler(req, res) {
+
+  // إنشاء رابط
   if (req.method === "POST") {
     const { url } = req.body;
 
@@ -6,12 +10,23 @@ export default function handler(req, res) {
       return res.status(400).json({ error: "No URL" });
     }
 
-    const short = Math.random().toString(36).substring(7);
+    const code = Math.random().toString(36).substring(7);
 
-    res.status(200).json({
-      short: "https://rasmati-links.vercel.app/" + short
+    links[code] = url;
+
+    return res.status(200).json({
+      short: "https://rasmati-links.vercel.app/" + code
     });
-  } else {
-    res.status(405).json({ error: "Method not allowed" });
+  }
+
+  // التحويل
+  if (req.method === "GET") {
+    const code = req.query.code;
+
+    if (links[code]) {
+      return res.redirect(links[code]);
+    } else {
+      return res.status(404).send("Not found");
+    }
   }
 }
