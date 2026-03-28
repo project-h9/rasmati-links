@@ -1,36 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Rasmati 🔗</title>
-</head>
-<body style="background:#111;color:white;text-align:center">
-
-<h1>🔗 Rasmati</h1>
-
-<input id="url" placeholder="Enter link">
-<button onclick="shorten()">Shorten</button>
-
-<div id="result"></div>
-
 <script>
-const API = "PUT_WORKER_URL_HERE";
-
 async function shorten() {
   let url = document.getElementById("url").value;
 
-  let res = await fetch(API, {
-    method:"POST",
+  let res = await fetch("/api/index", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({ url })
   });
 
   let data = await res.json();
 
-  let short = API + "/" + data.code;
-
   document.getElementById("result").innerHTML =
-    "<p>" + short + "</p>";
+    "<p>" + data.short + "</p>";
 }
 </script>
-
-</body>
-</html>
